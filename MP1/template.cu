@@ -6,6 +6,7 @@
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <nvtx3/nvToolsExt.h>
 #include <string>
 #include <thrust/device_vector.h>
 #include <thrust/functional.h>
@@ -14,20 +15,6 @@
 #include <utility>
 #include <vector>
 
-
-#if !defined(__cpp_lib_print)
-namespace std {
-template <class... Args>
-void println(std::format_string<Args...> fmt, Args &&...args) {
-  std::cout << std::format(fmt, std::forward<Args>(args)...) << '\n';
-}
-} // namespace std
-#endif
-
-// __global__ void vecAdd(float *in1, float *in2, float *out, int len) {
-//   int i = blockIdx.x * blockDim.x + threadIdx.x;
-//   if(i < len) out[i] = in1[i] + in2[i];
-// }
 
 // Helper function to read raw binary file
 thrust::host_vector<float> read_raw_file(const std::string &filename) {
@@ -55,32 +42,6 @@ thrust::host_vector<float> read_raw_file(const std::string &filename) {
   thrust::host_vector<float> data(temp_data.begin(), temp_data.end());
   return data;
 }
-
-// Helper function to write raw binary file
-// void write_raw_file(const std::string& filename, const float* data, int
-// length) {
-//   std::ofstream file(filename, std::ios::binary);
-//   if (!file.is_open()) {
-//     std::cerr << "Error: Cannot open file " << filename << std::endl;
-//     exit(1);
-//   }
-
-//   file.write(reinterpret_cast<const char*>(data), length * sizeof(float));
-//   file.close();
-// }
-
-// Helper function to compare results
-// bool compare_results(const float* result, const float* expected, int length,
-// float epsilon = 1e-5) {
-//   for (int i = 0; i < length; i++) {
-//     if (std::abs(result[i] - expected[i]) > epsilon) {
-//       std::cerr << "Mismatch at index " << i << ": "
-//                 << result[i] << " vs " << expected[i] << std::endl;
-//       return false;
-//     }
-//   }
-//   return true;
-// }
 
 int main(int argc, char **argv) {
   cxxopts::Options options("MP1 Template",
@@ -124,24 +85,25 @@ int main(int argc, char **argv) {
     auto input2_host_vector = read_raw_file(input_file2);
     auto expected_output_host_vector = read_raw_file(output_file);
 
-    std::println("input1 size: {}, input2 size: {}, expected output size: {}",
-                 input1_host_vector.size(), input2_host_vector.size(),
-                 expected_output_host_vector.size());
-
     assert(input1_host_vector.size() == input2_host_vector.size() &&
            input1_host_vector.size() == expected_output_host_vector.size());
 
     auto data_length = input1_host_vector.size();
 
     // Allocate device memory and copy data
+    nvtxRangePushA("Data Transfer to Device");
     thrust::device_vector<float> input1_device_vector = input1_host_vector;
     thrust::device_vector<float> input2_device_vector = input2_host_vector;
     thrust::device_vector<float> output_device_vector(data_length);
+    nvtxRangePop();
 
+    nvtxRangePushA("Thrust Transform");
     // run thrust algorithm
     thrust::transform(input1_device_vector.begin(), input1_device_vector.end(),
                       input2_device_vector.begin(),
                       output_device_vector.begin(), thrust::plus<float>());
+
+    nvtxRangePop();
 
     // Copy result back to host
     thrust::host_vector<float> output_host_vector = output_device_vector;
