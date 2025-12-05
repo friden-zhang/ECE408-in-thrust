@@ -34,7 +34,7 @@ Before starting this lab, make sure that:
 This project uses CMake as the build system. To build:
 
 ```bash
-cd /home/friden/Code/ECE408-in-thrust
+cd /path/ECE408-in-thrust
 mkdir -p build
 cd build
 cmake ..
@@ -46,7 +46,7 @@ make
 After building, you can run the vector addition program:
 
 ```bash
-./build/MP1/template -w /home/friden/Code/ECE408-in-thrust/MP1/data
+./build/MP1/template -w /path/ECE408-in-thrust/MP1/data
 ```
 
 ### Command Line Options
@@ -75,9 +75,9 @@ Each test case directory should contain:
 If your solution is correct, you should see output like:
 
 ```
-Found sub-directory: "/home/friden/Code/ECE408-in-thrust/MP1/data/0"
+Found sub-directory: "/path/ECE408-in-thrust/MP1/data/0"
 Results match!
-Found sub-directory: "/home/friden/Code/ECE408-in-thrust/MP1/data/1"
+Found sub-directory: "/path/ECE408-in-thrust/MP1/data/1"
 Results match!
 ...
 ```
@@ -120,4 +120,4 @@ Or add it permanently to your `~/.zshrc` or `~/.bashrc`.
 
 ### Floating Point Precision Issues
 
-The comparison tolerance is set to `1e-3` to account for floating-point precision differences between CPU and GPU computations.
+The comparison tolerance is set to `1e-2` to account for floating-point precision differences between CPU and GPU computations.

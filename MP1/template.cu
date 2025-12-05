@@ -24,7 +24,6 @@ thrust::host_vector<float> read_raw_file(const std::string &filename) {
     exit(1);
   }
 
-  // read by lanes
   int count;
   file >> count;
 
