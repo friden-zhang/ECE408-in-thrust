@@ -16,3 +16,4 @@ find_package(cxxopts REQUIRED)
 find_package(CUDAToolkit REQUIRED)
 
 add_subdirectory(MP1)
+add_subdirectory(MP2)
