@@ -1,12 +1,12 @@
-add_executable(template template.cu)
+add_executable(mp1 template.cu)
 
 target_link_libraries(
-  template PRIVATE
+  mp1 PRIVATE
   cxxopts::cxxopts
   CUDA::cudart
 )
 
 set_target_properties(
-  template PROPERTIES
+  mp1 PROPERTIES
   CUDA_SEPARABLE_COMPILATION ON
 )
