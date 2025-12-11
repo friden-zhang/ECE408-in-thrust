@@ -46,7 +46,7 @@ make
 After building, you can run the vector addition program:
 
 ```bash
-./build/MP1/template -w /path/ECE408-in-thrust/MP1/data
+./build/MP1/mp1 -w /path/ECE408-in-thrust/MP1/data
 ```
 
 ### Command Line Options
@@ -56,7 +56,7 @@ After building, you can run the vector addition program:
 
 Example:
 ```bash
-./build/MP1/template --work_dir /path/to/data
+./build/MP1/mp1 --work_dir /path/to/data
 ```
 
 ## Input Data Format
