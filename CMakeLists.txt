@@ -17,3 +17,4 @@ find_package(CUDAToolkit REQUIRED)
 
 add_subdirectory(MP1)
 add_subdirectory(MP2)
+add_subdirectory(MP3)
